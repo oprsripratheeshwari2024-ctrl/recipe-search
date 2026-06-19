@@ -1,23 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
 
 function App() {
+  const [ingredient, setIngredient] = useState("");
+  const [recipes, setRecipes] = useState([]);
+
+  const searchRecipe = async () => {
+    const response = await fetch(
+      `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`
+    );
+
+    const data = await response.json();
+
+    if (data.meals) {
+      setRecipes(data.meals);
+    } else {
+      setRecipes([]);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Recipe Search App</h1>
+
+      <input
+        type="text"
+        placeholder="Enter Ingredient"
+        value={ingredient}
+        onChange={(e) => setIngredient(e.target.value)}
+      />
+
+      <button onClick={searchRecipe}>Search</button>
+
+      {recipes.length === 0 ? (
+        <h3>No Recipes Found</h3>
+      ) : (
+        recipes.map((recipe) => (
+          <div key={recipe.idMeal}>
+            <h3>{recipe.strMeal}</h3>
+
+            <img
+              src={recipe.strMealThumb}
+              alt={recipe.strMeal}
+              width="200"
+            />
+          </div>
+        ))
+      )}
     </div>
   );
 }
