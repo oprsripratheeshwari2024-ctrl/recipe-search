@@ -6,7 +6,7 @@ function App() {
 
   const searchRecipe = async () => {
     const response = await fetch(
-      `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`
+      `https://www.themealdb.com/api/json/v1/1/search.php?s=${ingredient}`
     );
 
     const data = await response.json();
@@ -36,17 +36,29 @@ function App() {
       ) : (
         recipes.map((recipe) => (
           <div key={recipe.idMeal}>
-            <h3>{recipe.strMeal}</h3>
+  <h3>{recipe.strMeal}</h3>
 
-            <img
-              src={recipe.strMealThumb}
-              alt={recipe.strMeal}
-              width="200"
-            />
-          </div>
-        ))
-      )}
-    </div>
+  <img
+    src={recipe.strMealThumb}
+    alt={recipe.strMeal}
+    width="200"
+  />
+
+  <p>
+    <b>Category:</b> {recipe.strCategory}
+  </p>
+
+  <p>
+    <b>Area:</b> {recipe.strArea}
+  </p>
+
+  <p>
+    {recipe.strInstructions?.substring(0, 200)}...
+  </p>
+</div>
+  ))
+)}
+     </div>
   );
 }
 
